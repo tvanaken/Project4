@@ -4,13 +4,23 @@ import java.util.ArrayList;
 
 public class ArrayLargeInteger<T> implements LargeInteger<T> {
 
-	private ArrayList<T> array;
+	private ArrayList<Character> array;
+	private char[] broken;
 	
 	public ArrayLargeInteger(String num) {
 		
-		array = new ArrayList<T>();
+		array = new ArrayList<Character>();
+		
 		for (int i = 0; i < num.length(); i++) {
 			array.add(num.charAt(i));
+		}
+	}
+	
+	public String toString() {
+		
+		System.out.print("[");
+		for (int i = 0; i < array.size(); i++) {
+			System.out.print(" ");
 		}
 	}
 	
