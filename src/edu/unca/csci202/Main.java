@@ -4,8 +4,11 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		ArrayLargeInteger test = new ArrayLargeInteger("123456789");
-		test.toString();
+		ArrayLargeInteger test1 = new ArrayLargeInteger("100");
+		System.out.println(test1);
+		System.out.println(test1.size());
+		
+		System.out.println(test1.add("1"));
 	}
 
 }

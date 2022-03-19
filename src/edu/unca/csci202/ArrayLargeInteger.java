@@ -18,18 +18,41 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	
 	public String toString() {
 		
-		System.out.print("[");
-		for (int i = 0; i < array.size(); i++) {
-			System.out.print(" ");
+		String out = "[";
+		for (int i = 0; i < array.size() - 1; i++) {
+			out += array.get(i) + ", ";
 		}
+		out += array.get(array.size() - 1) + "]";
+		return out;
 	}
 	
 	public int compareTo(T o) {
 		return 0;
 	}
 
-	public T add(T num) {
-		return null;
+	public ArrayList<Character> add(String num) {
+		
+		int string1 = array.size() - 1;
+		int string2 = num.length() - 1;
+		char num1;
+		char num2;
+		String result = null;
+		int smaller = string1;
+		
+		if (string1 > string2) {
+			smaller = string2;
+		}
+		
+		for (int i = smaller; i >= 0; i--) {
+			num1 = array.get(string1);
+			num2 = num.charAt(string2);
+			char add = (char) (num1 + num2);
+			array.set(string1, add);
+			string1--;
+			string2--;
+		}
+		
+		return array;
 	}
 
 	public T subtract(T num) {
@@ -58,5 +81,9 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 
 	public T signum(T num) {
 		return null;
+	}
+
+	public int size() {
+		return array.size();
 	}
 }
