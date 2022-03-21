@@ -52,8 +52,9 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		int lengthDiff;
 		int addition = 0;
 		int leftOver = 0;
-		String[] numArray = num.split("");
-		int[] arg = new int [num.length()];
+//		String[] numArray = num.split("");
+//		int[] arg = new int [num.length()];
+		ArrayLargeInteger<String> argArray = new ArrayLargeInteger<String>(num);
 		ArrayList<Integer> result = new ArrayList<Integer>();
 
 		if (isNegative && num.charAt(0) != '-') {
@@ -62,17 +63,13 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			return;
 		}
 		
-		for (int i = 0; i < num.length(); i++) {
-			arg[i] = Integer.valueOf(numArray[i]);
-		}
-				
-		if (num1Size > num2Size || num1Size == num2Size) {
+		if (num1Size > num2Size) {
 			
 			lengthDiff = num1Size - num2Size;
 			for (int i = num2Size; i >= 0; i--) {
 				
 				arrayInt = array.get(i + lengthDiff);
-				argInt = arg[i];
+				argInt = argArray.array.get(i);
 				addition = arrayInt + argInt + leftOver;
 				result.add(addition % 10);
 				leftOver = addition / 10;
@@ -87,7 +84,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			for (int i = num1Size; i >= 0; i--) {
 				
 				arrayInt = array.get(i);
-				argInt = arg[i + lengthDiff];
+				argInt = argArray.array.get(i + lengthDiff);
 				addition = arrayInt + argInt + leftOver;
 				result.add(addition % 10);
 				leftOver = addition / 10;
@@ -95,7 +92,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				//result.add((array.get(i) + leftOver) % 10);
-				result.add((arg[i] + leftOver) % 10);
+				result.add((argArray.array.get(i) + leftOver) % 10);
 			}
 		}
 		
@@ -117,7 +114,8 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		int difference = 0;
 		int leftOver = 0;
 		String[] numArray = num.split("");
-		ArrayList<Integer> arg = new ArrayList<Integer>();
+		int[] arg = new int[num.length()];
+		ArrayList<Integer> argArray = new ArrayList<Integer>();
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		
 		for (int i = 0; i < num.length(); i++) {
