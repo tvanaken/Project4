@@ -2,19 +2,19 @@ package edu.unca.csci202;
 
 public interface LargeInteger<T> extends Comparable<T> {
 
-	public T add(T num);
+	public void add(String num);
 	
-	public T subtract(T num);
+	public void subtract(String num);
 	
-	public T negate();
+	public void negate();
 	
 	public T abs();
 	
-	public T multiply(T num);
+	public void multiply(T num);
 	
-	public T max(T num);
+	public LargeInteger<T> max(String num);
 	
-	public T min(T num);
+	public LargeInteger<T> min(String num);
 	
-	public T signum(T num);
+	public int signum();
 }
