@@ -45,32 +45,32 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	
 	public void add(String num) {
 		
+		ArrayLargeInteger<String> argArray = new ArrayLargeInteger<String>(num);
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		int num1Size = array.size() - 1;
-		int num2Size = num.length() - 1;
-		int arrayInt;
-		int argInt;
+		int num2Size = argArray.size() - 1;
+		int largeInt;
+		int smallInt;
 		int lengthDiff;
 		int addition = 0;
 		int leftOver = 0;
-//		String[] numArray = num.split("");
-//		int[] arg = new int [num.length()];
-		ArrayLargeInteger<String> argArray = new ArrayLargeInteger<String>(num);
-		ArrayList<Integer> result = new ArrayList<Integer>();
-
-		if (isNegative && num.charAt(0) != '-') {
-			
-			this.subtract(num);
-			return;
-		}
+		
+		
 		
 		if (num1Size > num2Size) {
+			
+			if ((isNegative && !argArray.isNegative) || (!isNegative && argArray.isNegative)) {
+				
+				this.subtract(num);
+				return;
+			}
 			
 			lengthDiff = num1Size - num2Size;
 			for (int i = num2Size; i >= 0; i--) {
 				
-				arrayInt = array.get(i + lengthDiff);
-				argInt = argArray.array.get(i);
-				addition = arrayInt + argInt + leftOver;
+				largeInt = array.get(i + lengthDiff);
+				smallInt = argArray.array.get(i);
+				addition = largeInt + smallInt + leftOver;
 				result.add(addition % 10);
 				leftOver = addition / 10;
 			}
@@ -80,18 +80,24 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			}
 		} else {
 			
+			if (isNegative && !argArray.isNegative) {
+				
+				this.subtract(num);
+				isNegative = false;
+				return;
+			}
+			
 			lengthDiff = num2Size - num1Size;
 			for (int i = num1Size; i >= 0; i--) {
 				
-				arrayInt = array.get(i);
-				argInt = argArray.array.get(i + lengthDiff);
-				addition = arrayInt + argInt + leftOver;
+				largeInt = array.get(i);
+				smallInt = argArray.array.get(i + lengthDiff);
+				addition = largeInt + smallInt + leftOver;
 				result.add(addition % 10);
 				leftOver = addition / 10;
 			}
 			
 			for (int i = lengthDiff - 1; i >= 0; i--) {
-				//result.add((array.get(i) + leftOver) % 10);
 				result.add((argArray.array.get(i) + leftOver) % 10);
 			}
 		}
@@ -106,30 +112,24 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	
 	public void subtract(String num) {
 		
+		ArrayLargeInteger<String> argArray = new ArrayLargeInteger<String>(num);
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		int num1Size = array.size() - 1;
-		int num2Size = num.length() - 1;
-		int arrayInt;
-		int argInt;
+		int num2Size = argArray.size() - 1;
+		int largeInt;
+		int smallInt;
 		int lengthDiff;
 		int difference = 0;
 		int leftOver = 0;
-		String[] numArray = num.split("");
-		int[] arg = new int[num.length()];
-		ArrayList<Integer> argArray = new ArrayList<Integer>();
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		
-		for (int i = 0; i < num.length(); i++) {
-			arg[i] = Integer.valueOf(numArray[i]);
-		}
 				
 		if (num1Size > num2Size) {
 			
 			lengthDiff = num1Size - num2Size;
 			for (int i = num2Size; i >= 0; i--) {
 				
-				arrayInt = array.get(i + lengthDiff);
-				argInt = arg[i];
-				difference = arrayInt - argInt - leftOver;
+				largeInt = array.get(i + lengthDiff);
+				smallInt = argArray.array.get(i);
+				difference = largeInt - smallInt - leftOver;
 
 				if (difference < 0) {
 					difference += 10;
@@ -156,9 +156,9 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			lengthDiff = num2Size - num1Size;
 			for (int i = num1Size; i >= 0; i--) {
 				
-				arrayInt = array.get(i);
-				argInt = arg[i + lengthDiff];
-				difference = argInt - arrayInt - leftOver;
+				smallInt = array.get(i);
+				largeInt = argArray.array.get(i + lengthDiff);
+				difference = largeInt - smallInt - leftOver;
 				if (difference < 0) {
 					difference += 10;
 					leftOver = 1;
@@ -169,17 +169,16 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			}
 			
 			for (int i = lengthDiff - 1; i >= 0; i--) {
-				if (arg[i] == 0 && leftOver > 0) {
+				if (argArray.array.get(i) == 0 && leftOver > 0) {
 					result.add(9);
 					break;
 				}
-				difference = arg[i] - leftOver;
+				difference = argArray.array.get(i) - leftOver;
 				if (difference > 0 || i > 0) {
 					result.add(difference);
 				}
 				leftOver = 0;
 			}
-			isNegative = true;
 		}
 
 		Collections.reverse(result);
@@ -203,35 +202,45 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		
 	}
 
-	public LargeInteger<T> max(String num) {
+	public LargeInteger<T> max(ArrayLargeInteger<T> num) {
 		
 		int num1Size = array.size() - 1;
-		int num2Size = num.length() - 1;
-		if (num1Size > num2Size) {
-			
-			return (LargeInteger<T>) this;
-		} else if (num1Size < num2Size) {
-			
-			LargeInteger<T> argArray = new ArrayLargeInteger<T>(num);
-			return (LargeInteger<T>) argArray;
+		int num2Size = num.array.size() - 1;
+		boolean obLarger = false;
+		boolean argLarger = false;
+		
+		for (int i = 0; obLarger == false || argLarger == false; i++) {
+			if (array.get(i) > num.array.get(i)) {
+				obLarger = true;
+				return this;
+				
+			} else if (array.get(i) > num.array.get(i)) {
+				argLarger = true;
+				return num;
 			}
-		return (LargeInteger<T>) this;
+		}
+		return null;
 	}
 		
 
-	public LargeInteger<T> min(String num) {
+	public LargeInteger<T> min(ArrayLargeInteger<T> num) {
 		
 		int num1Size = array.size() - 1;
-		int num2Size = num.length() - 1;
-		if (num1Size < num2Size) {
-			
-			return this;
-		} else if (num1Size > num2Size) {
-			
-			ArrayLargeInteger<T> argArray = new ArrayLargeInteger<T>(num);
-			return argArray;
+		int num2Size = num.array.size() - 1;
+		boolean obSmaller = false;
+		boolean argSmaller = false;
+		
+		for (int i = 0; obSmaller == false || argSmaller == false; i++) {
+			if (array.get(i) < num.array.get(i)) {
+				obSmaller = true;
+				return this;
+				
+			} else if (array.get(i) > num.array.get(i)) {
+				argSmaller = true;
+				return num;
 			}
-		return this;
+		}
+		return null;
 	}
 
 	public int signum() {
