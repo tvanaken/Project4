@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class ArrayLargeInteger<T> implements LargeInteger<T> {
+public class ArrayLargeInteger implements LargeInteger {
 
 	private ArrayList<Integer> array;
 	boolean isNegative = false;
@@ -49,7 +49,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	
 	public void add(String num) {
 		
-		ArrayLargeInteger<String> argArray = new ArrayLargeInteger<String>(num);
+		ArrayLargeInteger argArray = new ArrayLargeInteger(num);
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		int num1Size = array.size() - 1;
 		int num2Size = argArray.size() - 1;
@@ -61,7 +61,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		
 		
 		
-		if (this.max((ArrayLargeInteger<T>) argArray) == this) {
+		if (this.max((ArrayLargeInteger) argArray) == this) {
 			
 			if (isNegative && !argArray.isNegative) {
 				
@@ -87,7 +87,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				result.add((array.get(i) + leftOver) % 10);
 			}
-		} else if (this.max((ArrayLargeInteger<T>) argArray) == argArray) {
+		} else if (this.max((ArrayLargeInteger) argArray) == argArray) {
 			
 			if ((isNegative && !argArray.isNegative) || (!isNegative && argArray.isNegative)) {
 				
@@ -135,7 +135,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	
 	public void subtract(String num) {
 		
-		ArrayLargeInteger<String> argArray = new ArrayLargeInteger<String>(num);
+		ArrayLargeInteger argArray = new ArrayLargeInteger(num);
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		int num1Size = array.size() - 1;
 		int num2Size = argArray.size() - 1;
@@ -208,7 +208,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		array = result;
 	}
 	
-	public int compareTo(T o) {
+	public int compareTo(Object o) {
 		return 0;
 	}
 
@@ -217,19 +217,19 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		isNegative = true;
 	}
 
-	public T abs() {
+	public LargeInteger abs() {
 		return null;
 	}
 
-	public void multiply(T num) {
+	public void multiply(LargeInteger num) {
 		
 	}
 
-	public LargeInteger<T> max(ArrayLargeInteger<T> num) {
+	public LargeInteger max(LargeInteger num) {
 		
-		if (array.size() > num.array.size()) {
+		if (array.size() > (num.array).size()) {
 			return this;
-		} else if (array.size() < num.array.size()) {
+		} else if (array.size() < ((LargeInteger) num.array).size()) {
 			return num;
 		} else {
 		
@@ -246,7 +246,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	}
 		
 
-	public LargeInteger<T> min(ArrayLargeInteger<T> num) {
+	public LargeInteger min(LargeInteger num) {
 		
 		int num1Size = array.size() - 1;
 		int num2Size = num.array.size() - 1;

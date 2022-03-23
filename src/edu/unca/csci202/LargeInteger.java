@@ -1,6 +1,6 @@
 package edu.unca.csci202;
 
-public interface LargeInteger<T> extends Comparable<T> {
+public interface LargeInteger extends Comparable {
 
 	Object array = null;
 
@@ -10,13 +10,13 @@ public interface LargeInteger<T> extends Comparable<T> {
 	
 	public void negate();
 	
-	public T abs();
+	public LargeInteger abs();
 	
-	public void multiply(T num);
+	public void multiply(LargeInteger num);
 	
-	public LargeInteger<T> max(LargeInteger<T> num);
+	public LargeInteger max(LargeInteger num);
 	
-	public LargeInteger<T> min(LargeInteger<T> num);
+	public LargeInteger min(LargeInteger num);
 	
 	public int signum();
 
