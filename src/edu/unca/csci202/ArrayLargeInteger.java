@@ -33,7 +33,8 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	
 	public String toString() {
 		
-		while (array.get(0) == 0) {
+		while (array.get(0) == 0 && array.size() > 1) {
+			
 			array.remove(0);
 		}
 		String out = "";
@@ -62,10 +63,14 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		
 		if (this.max((ArrayLargeInteger<T>) argArray) == this) {
 			
-			if ((isNegative && !argArray.isNegative) || (!isNegative && argArray.isNegative)) {
+			if (isNegative && !argArray.isNegative) {
 				
 				this.subtract(num);
 				isNegative = true;
+				return;
+			} else if (!isNegative && argArray.isNegative) {
+				
+				this.subtract(num);
 				return;
 			}
 			
@@ -91,6 +96,19 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 				isNegative = false;
 				return;
 			}
+			
+			lengthDiff = num2Size - num1Size;
+			for (int i = num1Size; i >= 0; i--) {
+				
+				largeInt = array.get(i);
+				smallInt = argArray.array.get(i + lengthDiff);
+				addition = largeInt + smallInt + leftOver;
+				result.add(addition % 10);
+				leftOver = addition / 10;
+			}
+			for (int i = lengthDiff - 1; i >= 0; i--) {
+				result.add((argArray.array.get(i) + leftOver) % 10);
+			}
 		} else {
 			
 			lengthDiff = num2Size - num1Size;
@@ -102,7 +120,6 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 				result.add(addition % 10);
 				leftOver = addition / 10;
 			}
-			
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				result.add((argArray.array.get(i) + leftOver) % 10);
 			}
@@ -149,7 +166,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				if (array.get(i) == 0 && leftOver > 0) {
 					result.add(9);
-					break;
+					continue;
 				}
 				difference = array.get(i) - leftOver;
 				if (difference > 0 || i > 0) {
@@ -177,7 +194,7 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				if (argArray.array.get(i) == 0 && leftOver > 0) {
 					result.add(9);
-					break;
+					continue;
 				}
 				difference = argArray.array.get(i) - leftOver;
 				if (difference > 0 || i > 0) {
@@ -210,19 +227,19 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 
 	public LargeInteger<T> max(ArrayLargeInteger<T> num) {
 		
-		int num1Size = array.size() - 1;
-		int num2Size = num.size() - 1;
-		boolean obLarger = false;
-		boolean argLarger = false;
+		if (array.size() > num.array.size()) {
+			return this;
+		} else if (array.size() < num.array.size()) {
+			return num;
+		} else {
 		
-		for (int i = 0; obLarger == false || argLarger == false; i++) {
-			if ((array.get(i) > num.array.get(i)) || (!isNegative && num.isNegative) || (array.size() > num.size())) {
-				obLarger = true;
-				return this;
-				
-			} else if ((array.get(i) < num.array.get(i)) || (isNegative && !num.isNegative)  || (array.size() < num.size())) {
-				argLarger = true;
-				return num;
+			for (int i = 0; i < array.size(); i++) {
+				if ((array.get(i) > num.array.get(i)) || (!isNegative && num.isNegative) || (array.size() > num.size())) {
+					return this;
+					
+				} else if ((array.get(i) < num.array.get(i)) || (isNegative && !num.isNegative)  || (array.size() < num.size())) {
+					return num;
+				}
 			}
 		}
 		return null;
