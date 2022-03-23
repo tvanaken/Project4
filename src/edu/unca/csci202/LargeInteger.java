@@ -2,6 +2,8 @@ package edu.unca.csci202;
 
 public interface LargeInteger<T> extends Comparable<T> {
 
+	Object array = null;
+
 	public void add(String num);
 	
 	public void subtract(String num);
@@ -17,4 +19,6 @@ public interface LargeInteger<T> extends Comparable<T> {
 	public LargeInteger<T> min(LargeInteger<T> num);
 	
 	public int signum();
+
+	public int size();
 }

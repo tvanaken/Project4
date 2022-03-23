@@ -33,6 +33,9 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	
 	public String toString() {
 		
+		while (array.get(0) == 0) {
+			array.remove(0);
+		}
 		String out = "";
 		if (isNegative) {
 			out = "-";
@@ -57,11 +60,12 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		
 		
 		
-		if (num1Size > num2Size) {
+		if (this.max((ArrayLargeInteger<T>) argArray) == this) {
 			
 			if ((isNegative && !argArray.isNegative) || (!isNegative && argArray.isNegative)) {
 				
 				this.subtract(num);
+				isNegative = true;
 				return;
 			}
 			
@@ -78,14 +82,16 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				result.add((array.get(i) + leftOver) % 10);
 			}
-		} else {
+		} else if (this.max((ArrayLargeInteger<T>) argArray) == argArray) {
 			
-			if (isNegative && !argArray.isNegative) {
+			if ((isNegative && !argArray.isNegative) || (!isNegative && argArray.isNegative)) {
 				
-				this.subtract(num);
+				argArray.subtract(this.toString());
+				this.array = argArray.array;
 				isNegative = false;
 				return;
 			}
+		} else {
 			
 			lengthDiff = num2Size - num1Size;
 			for (int i = num1Size; i >= 0; i--) {
@@ -205,16 +211,16 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 	public LargeInteger<T> max(ArrayLargeInteger<T> num) {
 		
 		int num1Size = array.size() - 1;
-		int num2Size = num.array.size() - 1;
+		int num2Size = num.size() - 1;
 		boolean obLarger = false;
 		boolean argLarger = false;
 		
 		for (int i = 0; obLarger == false || argLarger == false; i++) {
-			if (array.get(i) > num.array.get(i)) {
+			if ((array.get(i) > num.array.get(i)) || (!isNegative && num.isNegative) || (array.size() > num.size())) {
 				obLarger = true;
 				return this;
 				
-			} else if (array.get(i) > num.array.get(i)) {
+			} else if ((array.get(i) < num.array.get(i)) || (isNegative && !num.isNegative)  || (array.size() < num.size())) {
 				argLarger = true;
 				return num;
 			}
@@ -231,11 +237,11 @@ public class ArrayLargeInteger<T> implements LargeInteger<T> {
 		boolean argSmaller = false;
 		
 		for (int i = 0; obSmaller == false || argSmaller == false; i++) {
-			if (array.get(i) < num.array.get(i)) {
+			if ((array.get(i) < num.array.get(i)) || (!isNegative && num.isNegative)) {
 				obSmaller = true;
 				return this;
 				
-			} else if (array.get(i) > num.array.get(i)) {
+			} else if ((array.get(i) > num.array.get(i)) || (isNegative && !num.isNegative)) {
 				argSmaller = true;
 				return num;
 			}
