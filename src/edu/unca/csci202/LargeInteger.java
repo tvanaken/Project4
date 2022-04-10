@@ -3,6 +3,7 @@ package edu.unca.csci202;
 public interface LargeInteger extends Comparable {
 
 	Object array = null;
+	boolean isNegative = false;
 
 	public void add(String num);
 	
@@ -10,7 +11,7 @@ public interface LargeInteger extends Comparable {
 	
 	public void negate();
 	
-	public LargeInteger abs();
+	public void abs();
 	
 	public void multiply(LargeInteger num);
 	
