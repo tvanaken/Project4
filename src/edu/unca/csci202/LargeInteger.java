@@ -13,7 +13,7 @@ public interface LargeInteger extends Comparable {
 	
 	public void abs();
 	
-	public void multiply(LargeInteger num);
+	public void multiply(String num);
 	
 	public LargeInteger max(LargeInteger num);
 	
