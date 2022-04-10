@@ -11,7 +11,7 @@ public interface LargeInteger extends Comparable {
 	
 	public void negate();
 	
-	public LargeInteger abs();
+	public void abs();
 	
 	public void multiply(LargeInteger num);
 	
