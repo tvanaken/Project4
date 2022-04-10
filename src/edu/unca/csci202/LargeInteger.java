@@ -3,6 +3,7 @@ package edu.unca.csci202;
 public interface LargeInteger extends Comparable {
 
 	Object array = null;
+	boolean isNegative = false;
 
 	public void add(String num);
 	
