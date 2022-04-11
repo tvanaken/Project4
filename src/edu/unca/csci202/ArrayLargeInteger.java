@@ -362,19 +362,20 @@ public class ArrayLargeInteger implements LargeInteger {
 		int bottom = 0;
 		
 		
-		for (int i = num1Size; i >= 0; i--) {
+		for (int i = num2Size; i >= 0; i--) {
 			bottom = 0;
-			int first = array.get(i);
+			int first = argArray.array.get(i);
 			int leftOver = 0;
 			
-			for (int j = num2Size; j >= 0; j--) {
-				int second = argArray.array.get(j);
+			for (int j = num1Size; j >= 0; j--) {
+				int second = array.get(j);
 				int product = first * second + leftOver;
 				leftOver = product / 10;
 				result.add(top + bottom, product % 10);
 				bottom++;
 			}
 			if (leftOver > 0) {
+				result.add(top + bottom, 0);
 				int carry = result.get(top + bottom);
 				carry += leftOver;
 				result.set(top + bottom, carry);
