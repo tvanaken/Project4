@@ -1,11 +1,10 @@
 package edu.unca.csci202;
 
-public interface LargeInteger extends Comparable {
-
-	Object array = null;
-	boolean isNegative = false;
+public interface LargeInteger extends Comparable<Object> {
 
 	public void add(String num);
+	
+	public boolean equals(Object num);
 	
 	public void subtract(String num);
 	

@@ -1,7 +1,6 @@
 package edu.unca.csci202;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class ArrayLargeInteger implements LargeInteger {
@@ -478,5 +477,11 @@ public class ArrayLargeInteger implements LargeInteger {
 	public int size() {
 		
 		return array.size();
+	}
+	
+	@Override
+	public boolean equals(Object num) {
+		
+		return false;
 	}
 }
