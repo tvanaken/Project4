@@ -356,29 +356,48 @@ public class ArrayLargeInteger implements LargeInteger {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num);
 		ArrayList<Integer> result = new ArrayList<Integer>();
-		int num1Size = array.size() - 1;
-		int num2Size = argArray.size() - 1;
+		int num1Size = array.size();
+		int num2Size = argArray.size();
 		int top = 0;
 		int bottom = 0;
+		int first;
+		int second;
+		result.add(0);
 		
-		
-		for (int i = num2Size; i >= 0; i--) {
+		for (int i = num1Size - 1; i >= 0; i--) {
 			bottom = 0;
-			int first = argArray.array.get(i);
 			int leftOver = 0;
-			result.add(0);
+			first = array.get(i);
 			
-			for (int j = num1Size; j >= 0; j--) {
-				int second = array.get(j);
-				int product = first * second + result.get(top + bottom) + leftOver;
+			
+			for (int j = num2Size - 1; j >= 0; j--) {
+				second = argArray.array.get(j);
+				int product = first * second;
+				try {
+					product += result.get(top + bottom) + leftOver;
+				} catch (IndexOutOfBoundsException e) {
+					product += leftOver;
+				}
 				leftOver = product / 10;
-				result.add(top + bottom, product % 10);
+				try {
+					result.set(top + bottom, product % 10);
+				} catch (IndexOutOfBoundsException e) {
+					result.add(product % 10);
+				}
+				
 				bottom++;
 			}
 			if (leftOver > 0) {
+				result.add(0);
 				result.set(top + bottom, result.get(top + bottom) + leftOver);
 			}
 			top++;
+		}
+		
+		if ((argArray.isNegative && !isNegative) || (isNegative == true && !argArray.isNegative)) {
+			isNegative = true;
+		} else if (isNegative && argArray.isNegative) {
+			isNegative = false;
 		}
 		Collections.reverse(result);
 		array = result;

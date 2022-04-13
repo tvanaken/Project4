@@ -10,11 +10,9 @@ public class Main {
 		System.out.println("Max: " + test1.max(test2));
 		System.out.println("Min: " + test1.min(test2));
 		System.out.println("Signum: " + test1.signum());
-		test1.multiply("11");
-		System.out.println("99*11 = 1089");
+		test1.multiply("9");
+		System.out.println("99*9 = 891");
 
-		System.out.println(test1);
-		test1.abs();
 		System.out.println(test1);
 
 	}
