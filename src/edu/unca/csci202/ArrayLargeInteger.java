@@ -44,8 +44,8 @@ public class ArrayLargeInteger implements LargeInteger {
 			
 			array.remove(0);
 		}
-
-		if (isNegative) {
+		
+		if (isNegative && array.get(0) != 0) {
 			out = "-";
 		}
 		for (int i = 0; i < array.size(); i++) {
@@ -174,7 +174,7 @@ public class ArrayLargeInteger implements LargeInteger {
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				addition = (argArray.array.get(i) + leftOver);
 				result.add(addition % 10);
-				leftOver = addition / 10;			
+				leftOver = addition / 10;
 			}
 		}
 		
@@ -350,19 +350,27 @@ public class ArrayLargeInteger implements LargeInteger {
 		return 0;
 	}
 
-	public void negate() {
+	public LargeInteger negate() {
 		
-		isNegative = true;
+		ArrayLargeInteger temp = new ArrayLargeInteger(this.toString());
+		
+		temp.isNegative = true;
+		
+		return temp;
 	}
 
-	public void abs() {
+	public LargeInteger abs() {
 		
-		isNegative = false;
+		ArrayLargeInteger temp = new ArrayLargeInteger(this.toString());
+		
+		temp.isNegative = false;
+		
+		return temp;
 	}
 
-	public void multiply(String num) {
+	public void multiply(LargeInteger num) {
 		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num);
+		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		int num1Size = array.size();
 		int num2Size = argArray.size();
@@ -372,11 +380,16 @@ public class ArrayLargeInteger implements LargeInteger {
 		int second;
 		result.add(0);
 		
+		if (argArray.toString().equals("0") || this.toString().equals("0")) {
+			array = result;
+			isNegative = false;
+			return;
+		}
+		
 		for (int i = num1Size - 1; i >= 0; i--) {
 			bottom = 0;
 			int leftOver = 0;
 			first = array.get(i);
-			
 			
 			for (int j = num2Size - 1; j >= 0; j--) {
 				second = argArray.array.get(j);
@@ -465,19 +478,31 @@ public class ArrayLargeInteger implements LargeInteger {
 			return this;
 		} else if (isNegative && argArray.isNegative){
 			
+			if (array.size() < argArray.size()) {
+				return num;
+			} else if (array.size() > argArray.size()) {
+				return this;
+			}
+			
 			for (int i = 0; i < array.size(); i++) {
-				if ((array.get(i) < argArray.array.get(i)) || (array.size() < argArray.size())) {
+				if (array.get(i) < argArray.array.get(i)) {
 					return num;
-				} else if ((array.get(i) > argArray.array.get(i)) || (array.size() > argArray.size())) {
+				} else if (array.get(i) > argArray.array.get(i)) {
 					return this;
 				}
 			}
 		} else {
 		
+			if (array.size() > argArray.size()) {
+				return num;
+			} else if (array.size() < argArray.size()) {
+				return this;
+			}
+			
 			for (int i = 0; i < array.size(); i++) {
-				if ((array.get(i) > argArray.array.get(i)) || (array.size() > argArray.size())) {
+				if (array.get(i) > argArray.array.get(i)) {
 					return num;
-				} else if ((array.get(i) < argArray.array.get(i)) || (array.size() < argArray.size())) {
+				} else if (array.get(i) < argArray.array.get(i)) {
 					return this;
 				}
 			}
@@ -487,7 +512,7 @@ public class ArrayLargeInteger implements LargeInteger {
 
 	public int signum() {
 
-		if (this.toString().charAt(0) == '-') {
+		if (isNegative) {
 			return -1;
 		} else if (this.toString().charAt(0) == '0') {
 			return 0;

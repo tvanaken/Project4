@@ -8,11 +8,11 @@ public interface LargeInteger extends Comparable<Object> {
 	
 	public void subtract(LargeInteger num);
 	
-	public void negate();
+	public LargeInteger negate();
 	
-	public void abs();
+	public LargeInteger abs();
 	
-	public void multiply(String num);
+	public void multiply(LargeInteger num);
 	
 	public LargeInteger max(LargeInteger num);
 	
