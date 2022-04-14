@@ -54,9 +54,9 @@ public class ArrayLargeInteger implements LargeInteger {
 		return out;
 	}
 	
-	public void add(String num) {
+	public void add(LargeInteger num) {
 		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num);
+		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		int num1Size = array.size() - 1;
 		int num2Size = argArray.size() - 1;
@@ -76,7 +76,7 @@ public class ArrayLargeInteger implements LargeInteger {
 			} else if (!isNegative && argArray.isNegative) {
 				
 				argArray.isNegative = false;
-				this.subtract(argArray.toString());
+				this.subtract(argArray);
 				return;
 			} else if (isNegative && argArray.isNegative) {
 				
@@ -115,11 +115,11 @@ public class ArrayLargeInteger implements LargeInteger {
 				
 				isNegative = false;
 				if (this.max(argArray) == this) {
-					this.subtract(argArray.toString());
+					this.subtract(argArray);
 					isNegative = true;
 					return;
 				} else {
-					this.subtract(argArray.toString());
+					this.subtract(argArray);
 					isNegative = false;
 					return;
 				}
@@ -177,9 +177,9 @@ public class ArrayLargeInteger implements LargeInteger {
 		array = result;
 	}
 	
-	public void subtract(String num) {
+	public void subtract(LargeInteger num) {
 		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num);
+		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		int num1Size = array.size() - 1;
 		int num2Size = argArray.size() - 1;
@@ -200,7 +200,7 @@ public class ArrayLargeInteger implements LargeInteger {
 			} else if (!isNegative && argArray.isNegative) {
 				
 				argArray.isNegative = false;
-				this.add(argArray.toString());
+				this.add(argArray);
 				isNegative = false;
 				return;
 			} else if (isNegative && argArray.isNegative){
@@ -268,7 +268,7 @@ public class ArrayLargeInteger implements LargeInteger {
 			if (isNegative && !argArray.isNegative) {
 				
 				isNegative = false;
-				this.add(argArray.toString());
+				this.add(argArray);
 				isNegative = true;
 				return;
 			} else if (isNegative && argArray.isNegative) {
@@ -480,10 +480,8 @@ public class ArrayLargeInteger implements LargeInteger {
 	}
 	
 	public boolean equals(LargeInteger num) {
-		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		
-		if ((this.toString().compareTo(argArray.toString())) == 0) {
+				
+		if ((this.toString().compareTo(num.toString())) == 0) {
 			return true;
 		} else {
 			return false;
