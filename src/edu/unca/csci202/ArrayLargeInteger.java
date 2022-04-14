@@ -91,8 +91,9 @@ public class ArrayLargeInteger implements LargeInteger {
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					result.add((array.get(i) + leftOver) % 10);
-				}
+					addition = (array.get(i) + leftOver);
+					result.add(addition % 10);
+					leftOver = addition / 10;				}
 			} else {
 			
 				lengthDiff = num1Size - num2Size;
@@ -106,7 +107,9 @@ public class ArrayLargeInteger implements LargeInteger {
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					result.add((array.get(i) + leftOver) % 10);
+					addition = (array.get(i) + leftOver);
+					result.add(addition % 10);
+					leftOver = addition / 10;
 				}
 			}
 		} else if (this.max(argArray) == argArray) {
@@ -136,7 +139,9 @@ public class ArrayLargeInteger implements LargeInteger {
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					result.add((argArray.array.get(i) + leftOver) % 10);
+					addition = (argArray.array.get(i) + leftOver);
+					result.add(addition % 10);
+					leftOver = addition / 10;				
 				}
 			} else {
 			
@@ -150,7 +155,9 @@ public class ArrayLargeInteger implements LargeInteger {
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					result.add((argArray.array.get(i) + leftOver) % 10);
+					addition = (argArray.array.get(i) + leftOver);
+					result.add(addition % 10);
+					leftOver = addition / 10;
 				}
 			}
 		} else {
@@ -165,7 +172,9 @@ public class ArrayLargeInteger implements LargeInteger {
 				leftOver = addition / 10;
 			}
 			for (int i = lengthDiff - 1; i >= 0; i--) {
-				result.add((argArray.array.get(i) + leftOver) % 10);
+				addition = (argArray.array.get(i) + leftOver);
+				result.add(addition % 10);
+				leftOver = addition / 10;			
 			}
 		}
 		
@@ -412,19 +421,32 @@ public class ArrayLargeInteger implements LargeInteger {
 			return num;
 		} else if (isNegative && argArray.isNegative){
 			
+			if (this.size() < argArray.size()) {
+				return this;
+			} else if (this.size() > argArray.size()) {
+				return num;
+			}
+			
 			for (int i = 0; i < array.size(); i++) {
-				if ((array.get(i) < argArray.array.get(i)) || (array.size() < argArray.size())) {
+				if (array.get(i) < argArray.array.get(i)) {
 					return this;
-				} else if ((array.get(i) > argArray.array.get(i)) || (array.size() > argArray.size())) {
+				} else if (array.get(i) > argArray.array.get(i)) {
 					return num;
 				}
 			}
 		} else {
 		
+			if (this.size() > argArray.size()) {
+				return this;
+			} else if (this.size() < argArray.size()) {
+				return num;
+			}
+			
 			for (int i = 0; i < array.size(); i++) {
-				if ((array.get(i) > argArray.array.get(i)) || (array.size() > argArray.size())) {
+				
+				if (array.get(i) > argArray.array.get(i)) {
 					return this;
-				} else if ((array.get(i) < argArray.array.get(i)) || (array.size() < argArray.size())) {
+				} else if (array.get(i) < argArray.array.get(i)) {
 					return num;
 				}
 			}
