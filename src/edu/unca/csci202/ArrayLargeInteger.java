@@ -479,9 +479,14 @@ public class ArrayLargeInteger implements LargeInteger {
 		return array.size();
 	}
 	
-	@Override
-	public boolean equals(Object num) {
+	public boolean equals(LargeInteger num) {
 		
-		return false;
+		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
+		
+		if ((this.toString().compareTo(argArray.toString())) == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

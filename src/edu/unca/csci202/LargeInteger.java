@@ -4,7 +4,7 @@ public interface LargeInteger extends Comparable<Object> {
 
 	public void add(String num);
 	
-	public boolean equals(Object num);
+	public boolean equals(LargeInteger num);
 	
 	public void subtract(String num);
 	
