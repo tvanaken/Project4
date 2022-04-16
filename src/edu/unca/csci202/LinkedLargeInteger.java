@@ -2,18 +2,19 @@ package edu.unca.csci202;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 
-public class ArrayLargeInteger implements LargeInteger {
+public class LinkedLargeInteger implements LargeInteger {
 
-	private ArrayList<Integer> array;
+	private LinkedList<Integer> list;
 	boolean isNegative = false;
 	
-	public ArrayLargeInteger(String num) {
+	public LinkedLargeInteger(String num) {
 		
-		array = new ArrayList<Integer>();
+		list = new LinkedList<Integer>();
 		int a = 0;
 		
-		for (int i = 0; i < num.length(); i++) {
+		for (int i = 0; i< num.length(); i++) {
 			
 			if (num.charAt(0) == '-') {
 				num = num.substring(1);
@@ -21,11 +22,11 @@ public class ArrayLargeInteger implements LargeInteger {
 					num = num.substring(1);
 				}
 				a = Integer.parseInt(String.valueOf(num.charAt(i)));
-				array.add(a);
+				list.add(a);
 				isNegative = true;
 			} else {
 				a = Integer.parseInt(String.valueOf(num.charAt(i)));
-				array.add(a);
+				list.add(a);
 			}
 		}
 	}
@@ -34,64 +35,79 @@ public class ArrayLargeInteger implements LargeInteger {
 		
 		String out = "";
 		
-		if (array.isEmpty()) {
+		if (list.isEmpty()) {
 			
 			out += "0";
 			return out;
 		}
 		
-		while (array.get(0) == 0 && array.size() > 1) {
+		while (list.get(0) == 0 && list.size() > 1) {
 			
-			array.remove(0);
+			list.remove(0);
 		}
 		
-		if (isNegative && array.get(0) != 0) {
+		if (isNegative && list.get(0) != 0) {
 			out = "-";
 		}
-		for (int i = 0; i < array.size(); i++) {
-			out += array.get(i);
+		for (int i = 0; i < list.size(); i++) {
+			out += list.get(i);
 		}
 		return out;
 	}
 	
-	public LargeInteger add(LargeInteger num) {
+	@Override
+	public int compareTo(Object num) {
 		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		int num1Size = array.size() - 1;
-		int num2Size = argArray.size() - 1;
+		LinkedLargeInteger temp = new LinkedLargeInteger(num.toString());
+		
+		if (this.max(temp) == this) {
+			return 1;
+		} else if (this.max(temp) == temp) { 
+			return -1;
+		}
+		return 0;
+	}
+
+	@Override
+	public LargeInteger add(LargeInteger num) {
+
+
+		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
+		LinkedList<Integer> result = new LinkedList<Integer>();
+		int num1Size = list.size() - 1;
+		int num2Size = argList.size() - 1;
 		int largeInt;
 		int smallInt;
 		int lengthDiff;
 		int addition = 0;
 		int leftOver = 0;
 		
-		if (this.max(argArray) == this) {
+		if (this.max(argList) == this) {
 			
-			if (isNegative && !argArray.isNegative) {
+			if (isNegative && !argList.isNegative) {
 				
 				this.subtract(num);
 				isNegative = true;
 				return this;
-			} else if (!isNegative && argArray.isNegative) {
+			} else if (!isNegative && argList.isNegative) {
 				
-				argArray.isNegative = false;
-				this.subtract(argArray);
+				argList.isNegative = false;
+				this.subtract(argList);
 				return this;
-			} else if (isNegative && argArray.isNegative) {
+			} else if (isNegative && argList.isNegative) {
 				
 				lengthDiff = num2Size - num1Size;
 				for (int i = num1Size; i >= 0; i--) {
 					
-					largeInt = array.get(i);
-					smallInt = argArray.array.get(i + lengthDiff);
+					largeInt = list.get(i);
+					smallInt = argList.list.get(i + lengthDiff);
 					addition = largeInt + smallInt + leftOver;
 					result.add(addition % 10);
 					leftOver = addition / 10;
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					addition = (array.get(i) + leftOver);
+					addition = (list.get(i) + leftOver);
 					result.add(addition % 10);
 					leftOver = addition / 10;				}
 			} else {
@@ -99,47 +115,47 @@ public class ArrayLargeInteger implements LargeInteger {
 				lengthDiff = num1Size - num2Size;
 				for (int i = num2Size; i >= 0; i--) {
 					
-					largeInt = array.get(i + lengthDiff);
-					smallInt = argArray.array.get(i);
+					largeInt = list.get(i + lengthDiff);
+					smallInt = argList.list.get(i);
 					addition = largeInt + smallInt + leftOver;
 					result.add(addition % 10);
 					leftOver = addition / 10;
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					addition = (array.get(i) + leftOver);
+					addition = (list.get(i) + leftOver);
 					result.add(addition % 10);
 					leftOver = addition / 10;
 				}
 			}
-		} else if (this.max(argArray) == argArray) {
+		} else if (this.max(argList) == argList) {
 			
-			if (isNegative && !argArray.isNegative) {
+			if (isNegative && !argList.isNegative) {
 				
 				isNegative = false;
-				if (this.max(argArray) == this) {
-					this.subtract(argArray);
+				if (this.max(argList) == this) {
+					this.subtract(argList);
 					isNegative = true;
 					return this;
 				} else {
-					this.subtract(argArray);
+					this.subtract(argList);
 					isNegative = false;
 					return this;
 				}
 				
-			} else if (isNegative && argArray.isNegative) {
+			} else if (isNegative && argList.isNegative) {
 				
 				lengthDiff = num1Size - num2Size;
 				for (int i = num2Size; i >= 0; i--) {
 					
-					smallInt = array.get(i + lengthDiff);
-					largeInt = argArray.array.get(i);
+					smallInt = list.get(i + lengthDiff);
+					largeInt = argList.list.get(i);
 					addition = largeInt + smallInt + leftOver;
 					result.add(addition % 10);
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					addition = (argArray.array.get(i) + leftOver);
+					addition = (argList.list.get(i) + leftOver);
 					result.add(addition % 10);
 					leftOver = addition / 10;				
 				}
@@ -148,14 +164,14 @@ public class ArrayLargeInteger implements LargeInteger {
 				lengthDiff = num2Size - num1Size;
 				for (int i = num1Size; i >= 0; i--) {
 					
-					largeInt = array.get(i);
-					smallInt = argArray.array.get(i + lengthDiff);
+					largeInt = list.get(i);
+					smallInt = argList.list.get(i + lengthDiff);
 					addition = largeInt + smallInt + leftOver;
 					result.add(addition % 10);
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					addition = (argArray.array.get(i) + leftOver);
+					addition = (argList.list.get(i) + leftOver);
 					result.add(addition % 10);
 					leftOver = addition / 10;
 				}
@@ -165,14 +181,14 @@ public class ArrayLargeInteger implements LargeInteger {
 			lengthDiff = num2Size - num1Size;
 			for (int i = num1Size; i >= 0; i--) {
 				
-				largeInt = array.get(i);
-				smallInt = argArray.array.get(i + lengthDiff);
+				largeInt = list.get(i);
+				smallInt = argList.list.get(i + lengthDiff);
 				addition = largeInt + smallInt + leftOver;
 				result.add(addition % 10);
 				leftOver = addition / 10;
 			}
 			for (int i = lengthDiff - 1; i >= 0; i--) {
-				addition = (argArray.array.get(i) + leftOver);
+				addition = (argList.list.get(i) + leftOver);
 				result.add(addition % 10);
 				leftOver = addition / 10;
 			}
@@ -183,43 +199,54 @@ public class ArrayLargeInteger implements LargeInteger {
 		}
 		
 		Collections.reverse(result);
-		array = result;
+		list = result;
 		return this;
 	}
-	
+
+	@Override
+	public boolean equals(LargeInteger num) {
+		
+		if ((this.toString().compareTo(num.toString())) == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public LargeInteger subtract(LargeInteger num) {
 		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		int num1Size = array.size() - 1;
-		int num2Size = argArray.size() - 1;
+		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
+		LinkedList<Integer> result = new LinkedList<Integer>();
+		int num1Size = list.size() - 1;
+		int num2Size = argList.size() - 1;
 		int largeInt;
 		int smallInt;
 		int lengthDiff;
 		int difference = 0;
 		int leftOver = 0;
 				
-		if (this.max(argArray) == this) {
+		if (this.max(argList) == this) {
 
-			if (isNegative && !argArray.isNegative) {
+			if (isNegative && !argList.isNegative) {
 
 				isNegative = false;
 				
 				this.add(num);
 				return this;
-			} else if (!isNegative && argArray.isNegative) {
+			} else if (!isNegative && argList.isNegative) {
 				
-				argArray.isNegative = false;
-				this.add(argArray);
+				argList.isNegative = false;
+				this.add(argList);
 				isNegative = false;
 				return this;
-			} else if (isNegative && argArray.isNegative){
+			} else if (isNegative && argList.isNegative){
 				
 				lengthDiff = num2Size - num1Size;
 				for (int i = num1Size; i >= 0; i--) {
 					
-					smallInt = array.get(i);
-					largeInt = argArray.array.get(i + lengthDiff);
+					smallInt = list.get(i);
+					largeInt = argList.list.get(i + lengthDiff);
 					difference = largeInt - smallInt - leftOver;
 	
 					if (difference < 0) {
@@ -232,11 +259,11 @@ public class ArrayLargeInteger implements LargeInteger {
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					if (array.get(i) == 0 && leftOver > 0) {
+					if (list.get(i) == 0 && leftOver > 0) {
 						result.add(9);
 						continue;
 					}
-					difference = array.get(i) - leftOver;
+					difference = list.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
 						result.add(difference);
 					}
@@ -248,8 +275,8 @@ public class ArrayLargeInteger implements LargeInteger {
 				lengthDiff = num1Size - num2Size;
 				for (int i = num2Size; i >= 0; i--) {
 					
-					largeInt = array.get(i + lengthDiff);
-					smallInt = argArray.array.get(i);
+					largeInt = list.get(i + lengthDiff);
+					smallInt = argList.list.get(i);
 					difference = largeInt - smallInt - leftOver;
 	
 					if (difference < 0) {
@@ -262,32 +289,32 @@ public class ArrayLargeInteger implements LargeInteger {
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					if (array.get(i) == 0 && leftOver > 0) {
+					if (list.get(i) == 0 && leftOver > 0) {
 						result.add(9);
 						continue;
 					}
-					difference = array.get(i) - leftOver;
+					difference = list.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
 						result.add(difference);
 					}
 					leftOver = 0;
 				}
 			}
-		} else if (this.max(argArray) == argArray) {
+		} else if (this.max(argList) == argList) {
 			
-			if (isNegative && !argArray.isNegative) {
+			if (isNegative && !argList.isNegative) {
 				
 				isNegative = false;
-				this.add(argArray);
+				this.add(argList);
 				isNegative = true;
 				return this;
-			} else if (isNegative && argArray.isNegative) {
+			} else if (isNegative && argList.isNegative) {
 				
 				lengthDiff = num1Size - num2Size;
 				for (int i = num2Size; i >= 0; i--) {
 					
-					largeInt = array.get(i + lengthDiff);
-					smallInt = argArray.array.get(i);
+					largeInt = list.get(i + lengthDiff);
+					smallInt = argList.list.get(i);
 					difference = largeInt - smallInt - leftOver;
 	
 					if (difference < 0) {
@@ -300,11 +327,11 @@ public class ArrayLargeInteger implements LargeInteger {
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					if (array.get(i) == 0 && leftOver > 0) {
+					if (list.get(i) == 0 && leftOver > 0) {
 						result.add(9);
 						continue;
 					}
-					difference = array.get(i) - leftOver;
+					difference = list.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
 						result.add(difference);
 					}
@@ -316,8 +343,8 @@ public class ArrayLargeInteger implements LargeInteger {
 			lengthDiff = num2Size - num1Size;
 			for (int i = num1Size; i >= 0; i--) {
 				
-				smallInt = array.get(i);
-				largeInt = argArray.array.get(i + lengthDiff);
+				smallInt = list.get(i);
+				largeInt = argList.list.get(i + lengthDiff);
 				difference = largeInt - smallInt - leftOver;
 				if (difference < 0) {
 					difference += 10;
@@ -329,11 +356,11 @@ public class ArrayLargeInteger implements LargeInteger {
 			}
 			
 			for (int i = lengthDiff - 1; i >= 0; i--) {
-				if (argArray.array.get(i) == 0 && leftOver > 0) {
+				if (argList.list.get(i) == 0 && leftOver > 0) {
 					result.add(9);
 					continue;
 				}
-				difference = argArray.array.get(i) - leftOver;
+				difference = argList.list.get(i) - leftOver;
 				if (difference > 0 || i > 0) {
 					result.add(difference);
 				}
@@ -344,54 +371,44 @@ public class ArrayLargeInteger implements LargeInteger {
 		}
 
 		Collections.reverse(result);
-		array = result;
+		list = result;
 		return this;
 	}
-	
-	public int compareTo(Object num) {
-		
-		ArrayLargeInteger temp = new ArrayLargeInteger(num.toString());
-		
-		if (this.max(temp) == this) {
-			return 1;
-		} else if (this.max(temp) == temp) { 
-			return -1;
-		}
-		return 0;
-	}
 
+	@Override
 	public LargeInteger negate() {
 		
-		ArrayLargeInteger temp = new ArrayLargeInteger(this.toString());
+		LinkedLargeInteger temp = new LinkedLargeInteger(this.toString());
 		
 		temp.isNegative = true;
 		
 		return temp;
 	}
 
+	@Override
 	public LargeInteger abs() {
-		
-		ArrayLargeInteger temp = new ArrayLargeInteger(this.toString());
+
+		LinkedLargeInteger temp = new LinkedLargeInteger(this.toString());
 		
 		temp.isNegative = false;
 		
 		return temp;
 	}
 
+	@Override
 	public void multiply(LargeInteger num) {
-		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		int num1Size = array.size();
-		int num2Size = argArray.size();
+		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
+		LinkedList<Integer> result = new LinkedList<Integer>();
+		int num1Size = list.size();
+		int num2Size = argList.size();
 		int top = 0;
 		int bottom = 0;
 		int first;
 		int second;
 		result.add(0);
 		
-		if (argArray.toString().equals("0") || this.toString().equals("0")) {
-			array = result;
+		if (argList.toString().equals("0") || this.toString().equals("0")) {
+			list = result;
 			isNegative = false;
 			return;
 		}
@@ -399,10 +416,10 @@ public class ArrayLargeInteger implements LargeInteger {
 		for (int i = num1Size - 1; i >= 0; i--) {
 			bottom = 0;
 			int leftOver = 0;
-			first = array.get(i);
+			first = list.get(i);
 			
 			for (int j = num2Size - 1; j >= 0; j--) {
-				second = argArray.array.get(j);
+				second = argList.list.get(j);
 				int product = first * second;
 				try {
 					product += result.get(top + bottom) + leftOver;
@@ -425,94 +442,94 @@ public class ArrayLargeInteger implements LargeInteger {
 			top++;
 		}
 		
-		if ((argArray.isNegative && !isNegative) || (isNegative == true && !argArray.isNegative)) {
+		if ((argList.isNegative && !isNegative) || (isNegative == true && !argList.isNegative)) {
 			isNegative = true;
-		} else if (isNegative && argArray.isNegative) {
+		} else if (isNegative && argList.isNegative) {
 			isNegative = false;
 		}
 		Collections.reverse(result);
-		array = result;
+		list = result;
 	}
 
+	@Override
 	public LargeInteger max(LargeInteger num) {
+		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
 		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		
-		if ((!isNegative && argArray.isNegative)) {
+		if ((!isNegative && argList.isNegative)) {
 			return this;
-		} else if ((isNegative && !argArray.isNegative)) {
+		} else if ((isNegative && !argList.isNegative)) {
 			return num;
-		} else if (isNegative && argArray.isNegative){
+		} else if (isNegative && argList.isNegative){
 			
-			if (this.size() < argArray.size()) {
+			if (this.size() < argList.size()) {
 				return this;
-			} else if (this.size() > argArray.size()) {
+			} else if (this.size() > argList.size()) {
 				return num;
 			}
 			
-			for (int i = 0; i < array.size(); i++) {
-				if (array.get(i) < argArray.array.get(i)) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i) < argList.list.get(i)) {
 					return this;
-				} else if (array.get(i) > argArray.array.get(i)) {
+				} else if (list.get(i) > argList.list.get(i)) {
 					return num;
 				}
 			}
 		} else {
 		
-			if (this.size() > argArray.size()) {
+			if (this.size() > argList.size()) {
 				return this;
-			} else if (this.size() < argArray.size()) {
+			} else if (this.size() < argList.size()) {
 				return num;
 			}
 			
-			for (int i = 0; i < array.size(); i++) {
+			for (int i = 0; i < list.size(); i++) {
 				
-				if (array.get(i) > argArray.array.get(i)) {
+				if (list.get(i) > argList.list.get(i)) {
 					return this;
-				} else if (array.get(i) < argArray.array.get(i)) {
+				} else if (list.get(i) < argList.list.get(i)) {
 					return num;
 				}
 			}
 		}
 		return null;
 	}
-		
 
+	@Override
 	public LargeInteger min(LargeInteger num) {
 		
-		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
+		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
 		
-		if ((!isNegative && argArray.isNegative)) {
+		if ((!isNegative && argList.isNegative)) {
 			return num;
-		} else if ((isNegative && !argArray.isNegative)) {
+		} else if ((isNegative && !argList.isNegative)) {
 			return this;
-		} else if (isNegative && argArray.isNegative){
+		} else if (isNegative && argList.isNegative){
 			
-			if (array.size() < argArray.size()) {
+			if (list.size() < argList.size()) {
 				return num;
-			} else if (array.size() > argArray.size()) {
+			} else if (list.size() > argList.size()) {
 				return this;
 			}
 			
-			for (int i = 0; i < array.size(); i++) {
-				if (array.get(i) < argArray.array.get(i)) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i) < argList.list.get(i)) {
 					return num;
-				} else if (array.get(i) > argArray.array.get(i)) {
+				} else if (list.get(i) > argList.list.get(i)) {
 					return this;
 				}
 			}
 		} else {
 		
-			if (array.size() > argArray.size()) {
+			if (list.size() > argList.size()) {
 				return num;
-			} else if (array.size() < argArray.size()) {
+			} else if (list.size() < argList.size()) {
 				return this;
 			}
 			
-			for (int i = 0; i < array.size(); i++) {
-				if (array.get(i) > argArray.array.get(i)) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i) > argList.list.get(i)) {
 					return num;
-				} else if (array.get(i) < argArray.array.get(i)) {
+				} else if (list.get(i) < argList.list.get(i)) {
 					return this;
 				}
 			}
@@ -520,6 +537,7 @@ public class ArrayLargeInteger implements LargeInteger {
 		return null;
 	}
 
+	@Override
 	public int signum() {
 
 		if (isNegative) {
@@ -531,17 +549,10 @@ public class ArrayLargeInteger implements LargeInteger {
 		}
 	}
 
+	@Override
 	public int size() {
 		
-		return array.size();
+		return list.size();
 	}
-	
-	public boolean equals(LargeInteger num) {
-				
-		if ((this.toString().compareTo(num.toString())) == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+
 }

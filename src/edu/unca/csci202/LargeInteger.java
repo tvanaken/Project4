@@ -2,11 +2,11 @@ package edu.unca.csci202;
 
 public interface LargeInteger extends Comparable<Object> {
 
-	public void add(LargeInteger num);
+	public LargeInteger add(LargeInteger num);
 	
 	public boolean equals(LargeInteger num);
 	
-	public void subtract(LargeInteger num);
+	public LargeInteger subtract(LargeInteger num);
 	
 	public LargeInteger negate();
 	
