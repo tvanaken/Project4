@@ -4,11 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
+/**
+ * Allows for creation and manipulation of arbitrarily large numbers
+ * using LinkedList.
+ * @author Taylor Van Aken
+ */
 public class LinkedLargeInteger implements LargeInteger {
 
 	private LinkedList<Integer> list;
 	boolean isNegative = false;
 	
+	/**
+	 * Takes in a large string number and stores it in
+	 * an LinkedList
+	 * @param num number represented as a String
+	 */
 	public LinkedLargeInteger(String num) {
 		
 		list = new LinkedList<Integer>();
@@ -31,6 +41,10 @@ public class LinkedLargeInteger implements LargeInteger {
 		}
 	}
 	
+	/**
+	 * Converts the LinkedList into a String
+	 * @return out the LinkedList represented as a String
+	 */
 	public String toString() {
 		
 		String out = "";
@@ -55,7 +69,10 @@ public class LinkedLargeInteger implements LargeInteger {
 		return out;
 	}
 	
-	@Override
+	/**
+	 * Compares two LinkedLargeIntegers to see if they equal one another.
+	 * @return int -1, 1, or 0 depending on if it's less than, greater than, or equal to.
+	 */
 	public int compareTo(Object num) {
 		
 		LinkedLargeInteger temp = new LinkedLargeInteger(num.toString());
@@ -68,7 +85,11 @@ public class LinkedLargeInteger implements LargeInteger {
 		return 0;
 	}
 
-	@Override
+	/**
+	 * Adds two large numbers together and outputs the result regardless
+	 * of either one being negative or not.
+	 * @return LargeInteger the result of the addition
+	 */
 	public LargeInteger add(LargeInteger num) {
 
 
@@ -203,7 +224,10 @@ public class LinkedLargeInteger implements LargeInteger {
 		return this;
 	}
 
-	@Override
+	/**
+	 * Compares two LinkedLargeIntegers to see if they equal one another.
+	 * @return boolean true if the LinkedLargeInteger equals the argument
+	 */
 	public boolean equals(LargeInteger num) {
 		
 		if ((this.toString().compareTo(num.toString())) == 0) {
@@ -213,7 +237,11 @@ public class LinkedLargeInteger implements LargeInteger {
 		}
 	}
 
-	@Override
+	/**
+	 * Subtracts two large numbers from one another and outputs the result regardless
+	 * of either one being negative or not.
+	 * @return LargeInteger the result of the subtraction
+	 */
 	public LargeInteger subtract(LargeInteger num) {
 		
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
@@ -375,7 +403,10 @@ public class LinkedLargeInteger implements LargeInteger {
 		return this;
 	}
 
-	@Override
+	/**
+	 * Returns the negative of the LargeInteger
+	 * @return LargeInteger the negative of the original LinkedLargeInteger
+	 */
 	public LargeInteger negate() {
 		
 		LinkedLargeInteger temp = new LinkedLargeInteger(this.toString());
@@ -385,7 +416,10 @@ public class LinkedLargeInteger implements LargeInteger {
 		return temp;
 	}
 
-	@Override
+	/**
+	 * Returns the absolute value of the LargeInteger
+	 * @return LargeInteger the absolute value of the original LinkedLargeInteger
+	 */
 	public LargeInteger abs() {
 
 		LinkedLargeInteger temp = new LinkedLargeInteger(this.toString());
@@ -395,8 +429,11 @@ public class LinkedLargeInteger implements LargeInteger {
 		return temp;
 	}
 
-	@Override
-	public void multiply(LargeInteger num) {
+	/**
+	 * Multiplies two LinkedLargeIntegers together
+	 * @return LargeInteger the result of the multiplication
+	 */
+	public LargeInteger multiply(LargeInteger num) {
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
 		LinkedList<Integer> result = new LinkedList<Integer>();
 		int num1Size = list.size();
@@ -410,7 +447,7 @@ public class LinkedLargeInteger implements LargeInteger {
 		if (argList.toString().equals("0") || this.toString().equals("0")) {
 			list = result;
 			isNegative = false;
-			return;
+			return this;
 		}
 		
 		for (int i = num1Size - 1; i >= 0; i--) {
@@ -449,9 +486,13 @@ public class LinkedLargeInteger implements LargeInteger {
 		}
 		Collections.reverse(result);
 		list = result;
+		return this;
 	}
 
-	@Override
+	/**
+	 * Compares two LinkedLargeIntegers to find the larger of the two.
+	 * @return LargeInteger the larger of the two LinkedLargeIntegers
+	 */
 	public LargeInteger max(LargeInteger num) {
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
 		
@@ -494,7 +535,10 @@ public class LinkedLargeInteger implements LargeInteger {
 		return null;
 	}
 
-	@Override
+	/**
+	 * Compares two LinkedLargeInteger to find the smaller of the two.
+	 * @return LargeInteger the smaller of the two LinkedLargeInteger
+	 */
 	public LargeInteger min(LargeInteger num) {
 		
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
@@ -537,7 +581,12 @@ public class LinkedLargeInteger implements LargeInteger {
 		return null;
 	}
 
-	@Override
+	/**
+	 * Checks an LinkedLargeInteger to see if it's positive, negative,
+	 * or equal to 0;
+	 * @return int -1, 1, or 0 if the LinkedLargeInteger is either 
+	 * negative, positive, or equal to 0
+	 */
 	public int signum() {
 
 		if (isNegative) {
@@ -549,7 +598,10 @@ public class LinkedLargeInteger implements LargeInteger {
 		}
 	}
 
-	@Override
+	/**
+	 * Returns the size of the LinkedList
+	 * @return int the size of the LinkedList
+	 */
 	public int size() {
 		
 		return list.size();

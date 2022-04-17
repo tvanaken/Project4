@@ -3,11 +3,21 @@ package edu.unca.csci202;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Allows for creation and manipulation of arbitrarily large numbers
+ * using ArrayList.
+ * @author Taylor Van Aken
+ */
 public class ArrayLargeInteger implements LargeInteger {
 
 	private ArrayList<Integer> array;
 	boolean isNegative = false;
 	
+	/**
+	 * Takes in a large string number and stores it in
+	 * an ArrayList
+	 * @param num number represented as a String
+	 */
 	public ArrayLargeInteger(String num) {
 		
 		array = new ArrayList<Integer>();
@@ -30,6 +40,10 @@ public class ArrayLargeInteger implements LargeInteger {
 		}
 	}
 	
+	/**
+	 * Converts the ArrayList into a String
+	 * @return out the ArrayList represented as a String
+	 */
 	public String toString() {
 		
 		String out = "";
@@ -54,6 +68,11 @@ public class ArrayLargeInteger implements LargeInteger {
 		return out;
 	}
 	
+	/**
+	 * Adds two large numbers together and outputs the result regardless
+	 * of either one being negative or not.
+	 * @return LargeInteger the result of the addition
+	 */
 	public LargeInteger add(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
@@ -187,6 +206,11 @@ public class ArrayLargeInteger implements LargeInteger {
 		return this;
 	}
 	
+	/**
+	 * Subtracts two large numbers from one another and outputs the result regardless
+	 * of either one being negative or not.
+	 * @return LargeInteger the result of the subtraction
+	 */
 	public LargeInteger subtract(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
@@ -348,6 +372,10 @@ public class ArrayLargeInteger implements LargeInteger {
 		return this;
 	}
 	
+	/**
+	 * Compares two ArrayLargeIntegers to see if they equal one another.
+	 * @return int -1, 1, or 0 depending on if it's less than, greater than, or equal to.
+	 */
 	public int compareTo(Object num) {
 		
 		ArrayLargeInteger temp = new ArrayLargeInteger(num.toString());
@@ -360,6 +388,10 @@ public class ArrayLargeInteger implements LargeInteger {
 		return 0;
 	}
 
+	/**
+	 * Returns the negative of the LargeInteger
+	 * @return LargeInteger the negative of the original ArrayLargeInteger
+	 */
 	public LargeInteger negate() {
 		
 		ArrayLargeInteger temp = new ArrayLargeInteger(this.toString());
@@ -369,6 +401,10 @@ public class ArrayLargeInteger implements LargeInteger {
 		return temp;
 	}
 
+	/**
+	 * Returns the absolute value of the LargeInteger
+	 * @return LargeInteger the absolute of the original ArrayLargeInteger
+	 */
 	public LargeInteger abs() {
 		
 		ArrayLargeInteger temp = new ArrayLargeInteger(this.toString());
@@ -378,7 +414,11 @@ public class ArrayLargeInteger implements LargeInteger {
 		return temp;
 	}
 
-	public void multiply(LargeInteger num) {
+	/**
+	 * Multiplies two ArrayLargeIntegers together
+	 * @return LargeInteger the result of the multiplication
+	 */
+	public LargeInteger multiply(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
 		ArrayList<Integer> result = new ArrayList<Integer>();
@@ -393,7 +433,7 @@ public class ArrayLargeInteger implements LargeInteger {
 		if (argArray.toString().equals("0") || this.toString().equals("0")) {
 			array = result;
 			isNegative = false;
-			return;
+			return this;
 		}
 		
 		for (int i = num1Size - 1; i >= 0; i--) {
@@ -432,8 +472,13 @@ public class ArrayLargeInteger implements LargeInteger {
 		}
 		Collections.reverse(result);
 		array = result;
+		return this;
 	}
 
+	/**
+	 * Compares two ArrayLargeIntegers to find the larger of the two.
+	 * @return LargeInteger the larger of the two ArrayLargeIntegers
+	 */
 	public LargeInteger max(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
@@ -477,7 +522,10 @@ public class ArrayLargeInteger implements LargeInteger {
 		return null;
 	}
 		
-
+	/**
+	 * Compares two ArrayLargeIntegers to find the smaller of the two.
+	 * @return LargeInteger the smaller of the two ArrayLargeIntegers
+	 */
 	public LargeInteger min(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
@@ -520,6 +568,12 @@ public class ArrayLargeInteger implements LargeInteger {
 		return null;
 	}
 
+	/**
+	 * Checks an ArrayLargeInteger to see if it's positive, negative,
+	 * or equal to 0;
+	 * @return int -1, 1, or 0 if the ArrayLargeInteger is either 
+	 * negative, positive, or equal to 0
+	 */
 	public int signum() {
 
 		if (isNegative) {
@@ -531,11 +585,19 @@ public class ArrayLargeInteger implements LargeInteger {
 		}
 	}
 
+	/**
+	 * Returns the size of the ArrayList
+	 * @return int the size of the ArrayList
+	 */
 	public int size() {
 		
 		return array.size();
 	}
 	
+	/**
+	 * Compares two ArrayLargeIntegers to see if they equal one another.
+	 * @return boolean true if the ArrayLargeInteger equals the argument
+	 */
 	public boolean equals(LargeInteger num) {
 				
 		if ((this.toString().compareTo(num.toString())) == 0) {
