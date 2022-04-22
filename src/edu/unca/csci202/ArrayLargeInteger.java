@@ -76,7 +76,7 @@ public class ArrayLargeInteger implements LargeInteger {
 	public LargeInteger add(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		ArrayList<Integer> result = new ArrayList<Integer>();
+		ArrayLargeInteger result = new ArrayLargeInteger("");
 		int num1Size = array.size() - 1;
 		int num2Size = argArray.size() - 1;
 		int largeInt;
@@ -87,16 +87,9 @@ public class ArrayLargeInteger implements LargeInteger {
 		
 		if (this.max(argArray) == this) {
 			
-			if (isNegative && !argArray.isNegative) {
+			if (!isNegative && argArray.isNegative) {
 				
-				this.subtract(num);
-				isNegative = true;
-				return this;
-			} else if (!isNegative && argArray.isNegative) {
-				
-				argArray.isNegative = false;
-				this.subtract(argArray);
-				return this;
+				return this.subtract(argArray.negate());
 			} else if (isNegative && argArray.isNegative) {
 				
 				lengthDiff = num2Size - num1Size;
@@ -105,14 +98,16 @@ public class ArrayLargeInteger implements LargeInteger {
 					largeInt = array.get(i);
 					smallInt = argArray.array.get(i + lengthDiff);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.array.add(addition % 10);
 					leftOver = addition / 10;
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					addition = (array.get(i) + leftOver);
-					result.add(addition % 10);
-					leftOver = addition / 10;				}
+					result.array.add(addition % 10);
+					leftOver = addition / 10;				
+				}
+			result.isNegative = true;
 			} else {
 			
 				lengthDiff = num1Size - num2Size;
@@ -121,32 +116,19 @@ public class ArrayLargeInteger implements LargeInteger {
 					largeInt = array.get(i + lengthDiff);
 					smallInt = argArray.array.get(i);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.array.add(addition % 10);
 					leftOver = addition / 10;
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					addition = (array.get(i) + leftOver);
-					result.add(addition % 10);
+					result.array.add(addition % 10);
 					leftOver = addition / 10;
 				}
 			}
 		} else if (this.max(argArray) == argArray) {
 			
-			if (isNegative && !argArray.isNegative) {
-				
-				isNegative = false;
-				if (this.max(argArray) == this) {
-					this.subtract(argArray);
-					isNegative = true;
-					return this;
-				} else {
-					this.subtract(argArray);
-					isNegative = false;
-					return this;
-				}
-				
-			} else if (isNegative && argArray.isNegative) {
+			if (isNegative && argArray.isNegative) {
 				
 				lengthDiff = num1Size - num2Size;
 				for (int i = num2Size; i >= 0; i--) {
@@ -154,14 +136,15 @@ public class ArrayLargeInteger implements LargeInteger {
 					smallInt = array.get(i + lengthDiff);
 					largeInt = argArray.array.get(i);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.array.add(addition % 10);
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					addition = (argArray.array.get(i) + leftOver);
-					result.add(addition % 10);
+					result.array.add(addition % 10);
 					leftOver = addition / 10;				
 				}
+				result.isNegative = true;
 			} else {
 			
 				lengthDiff = num2Size - num1Size;
@@ -170,12 +153,12 @@ public class ArrayLargeInteger implements LargeInteger {
 					largeInt = array.get(i);
 					smallInt = argArray.array.get(i + lengthDiff);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.array.add(addition % 10);
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					addition = (argArray.array.get(i) + leftOver);
-					result.add(addition % 10);
+					result.array.add(addition % 10);
 					leftOver = addition / 10;
 				}
 			}
@@ -187,23 +170,22 @@ public class ArrayLargeInteger implements LargeInteger {
 				largeInt = array.get(i);
 				smallInt = argArray.array.get(i + lengthDiff);
 				addition = largeInt + smallInt + leftOver;
-				result.add(addition % 10);
+				result.array.add(addition % 10);
 				leftOver = addition / 10;
 			}
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				addition = (argArray.array.get(i) + leftOver);
-				result.add(addition % 10);
+				result.array.add(addition % 10);
 				leftOver = addition / 10;
 			}
 		}
 		
 		if (leftOver > 0) {
-			result.add(leftOver);
+			result.array.add(leftOver);
 		}
 		
-		Collections.reverse(result);
-		array = result;
-		return this;
+		Collections.reverse(result.array);
+		return result;
 	}
 	
 	/**
@@ -214,7 +196,7 @@ public class ArrayLargeInteger implements LargeInteger {
 	public LargeInteger subtract(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		ArrayList<Integer> result = new ArrayList<Integer>();
+		ArrayLargeInteger result = new ArrayLargeInteger("");
 		int num1Size = array.size() - 1;
 		int num2Size = argArray.size() - 1;
 		int largeInt;
@@ -226,17 +208,11 @@ public class ArrayLargeInteger implements LargeInteger {
 		if (this.max(argArray) == this) {
 
 			if (isNegative && !argArray.isNegative) {
-
-				isNegative = false;
 				
-				this.add(num);
-				return this;
+				return this.negate().add(num);
 			} else if (!isNegative && argArray.isNegative) {
 				
-				argArray.isNegative = false;
-				this.add(argArray);
-				isNegative = false;
-				return this;
+				return this.add(argArray.negate());
 			} else if (isNegative && argArray.isNegative){
 				
 				lengthDiff = num2Size - num1Size;
@@ -252,21 +228,21 @@ public class ArrayLargeInteger implements LargeInteger {
 					} else {
 						leftOver = 0;
 					}
-					result.add(difference);
+					result.array.add(difference);
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					if (array.get(i) == 0 && leftOver > 0) {
-						result.add(9);
+						result.array.add(9);
 						continue;
 					}
 					difference = array.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
-						result.add(difference);
+						result.array.add(difference);
 					}
 					leftOver = 0;
 				}
-				isNegative = false;
+				result.isNegative = false;
 			} else {
 			
 				lengthDiff = num1Size - num2Size;
@@ -282,17 +258,17 @@ public class ArrayLargeInteger implements LargeInteger {
 					} else {
 						leftOver = 0;
 					}
-					result.add(difference);
+					result.array.add(difference);
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					if (array.get(i) == 0 && leftOver > 0) {
-						result.add(9);
+						result.array.add(9);
 						continue;
 					}
 					difference = array.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
-						result.add(difference);
+						result.array.add(difference);
 					}
 					leftOver = 0;
 				}
@@ -301,10 +277,7 @@ public class ArrayLargeInteger implements LargeInteger {
 			
 			if (isNegative && !argArray.isNegative) {
 				
-				isNegative = false;
-				this.add(argArray);
-				isNegative = true;
-				return this;
+				return this.negate().add(argArray).negate();
 			} else if (isNegative && argArray.isNegative) {
 				
 				lengthDiff = num1Size - num2Size;
@@ -320,21 +293,21 @@ public class ArrayLargeInteger implements LargeInteger {
 					} else {
 						leftOver = 0;
 					}
-					result.add(difference);
+					result.array.add(difference);
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					if (array.get(i) == 0 && leftOver > 0) {
-						result.add(9);
+						result.array.add(9);
 						continue;
 					}
 					difference = array.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
-						result.add(difference);
+						result.array.add(difference);
 					}
 					leftOver = 0;
 				}
-				isNegative = true;
+				result.isNegative = true;
 			} else {
 			
 			lengthDiff = num2Size - num1Size;
@@ -349,27 +322,26 @@ public class ArrayLargeInteger implements LargeInteger {
 				} else {
 					leftOver = 0;
 				}
-				result.add(difference);
+				result.array.add(difference);
 			}
 			
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				if (argArray.array.get(i) == 0 && leftOver > 0) {
-					result.add(9);
+					result.array.add(9);
 					continue;
 				}
 				difference = argArray.array.get(i) - leftOver;
 				if (difference > 0 || i > 0) {
-					result.add(difference);
+					result.array.add(difference);
 				}
 				leftOver = 0;
 			}
-			isNegative = true;
+			result.isNegative = true;
 			}
 		}
 
-		Collections.reverse(result);
-		array = result;
-		return this;
+		Collections.reverse(result.array);
+		return result;
 	}
 	
 	/**
@@ -396,7 +368,11 @@ public class ArrayLargeInteger implements LargeInteger {
 		
 		ArrayLargeInteger temp = new ArrayLargeInteger(this.toString());
 		
-		temp.isNegative = true;
+		if (isNegative) {
+			temp.isNegative = false;
+		} else {
+			temp.isNegative = true;
+		}
 		
 		return temp;
 	}
@@ -421,19 +397,19 @@ public class ArrayLargeInteger implements LargeInteger {
 	public LargeInteger multiply(LargeInteger num) {
 		
 		ArrayLargeInteger argArray = new ArrayLargeInteger(num.toString());
-		ArrayList<Integer> result = new ArrayList<Integer>();
+		ArrayLargeInteger result = new ArrayLargeInteger("");
 		int num1Size = array.size();
 		int num2Size = argArray.size();
 		int top = 0;
 		int bottom = 0;
 		int first;
 		int second;
-		result.add(0);
+		result.array.add(0);
 		
 		if (argArray.toString().equals("0") || this.toString().equals("0")) {
-			array = result;
-			isNegative = false;
-			return this;
+			result.array.add(0);
+			result.isNegative = false;
+			return result;
 		}
 		
 		for (int i = num1Size - 1; i >= 0; i--) {
@@ -445,34 +421,33 @@ public class ArrayLargeInteger implements LargeInteger {
 				second = argArray.array.get(j);
 				int product = first * second;
 				try {
-					product += result.get(top + bottom) + leftOver;
+					product += result.array.get(top + bottom) + leftOver;
 				} catch (IndexOutOfBoundsException e) {
 					product += leftOver;
 				}
 				leftOver = product / 10;
 				try {
-					result.set(top + bottom, product % 10);
+					result.array.set(top + bottom, product % 10);
 				} catch (IndexOutOfBoundsException e) {
-					result.add(product % 10);
+					result.array.add(product % 10);
 				}
 				
 				bottom++;
 			}
 			if (leftOver > 0) {
-				result.add(0);
-				result.set(top + bottom, result.get(top + bottom) + leftOver);
+				result.array.add(0);
+				result.array.set(top + bottom, result.array.get(top + bottom) + leftOver);
 			}
 			top++;
 		}
 		
 		if ((argArray.isNegative && !isNegative) || (isNegative == true && !argArray.isNegative)) {
-			isNegative = true;
+			result.isNegative = true;
 		} else if (isNegative && argArray.isNegative) {
-			isNegative = false;
+			result.isNegative = false;
 		}
-		Collections.reverse(result);
-		array = result;
-		return this;
+		Collections.reverse(result.array);
+		return result;
 	}
 
 	/**
