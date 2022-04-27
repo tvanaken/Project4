@@ -4,17 +4,33 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		ArrayLargeInteger test1 = new ArrayLargeInteger("99");
-		ArrayLargeInteger test2 = new ArrayLargeInteger("999");
+		ArrayLargeInteger test1 = new ArrayLargeInteger("999");
+		ArrayLargeInteger test2 = new ArrayLargeInteger("-99");
 		ArrayLargeInteger test3 = new ArrayLargeInteger("900");
+		LinkedLargeInteger test4 = new LinkedLargeInteger("999");
+		LinkedLargeInteger test5 = new LinkedLargeInteger("-99");
+		LinkedLargeInteger test6 = new LinkedLargeInteger("900");
 		
 		
 		System.out.println("test1: "+ test1);
 		System.out.println("test2: "+ test2);
-		System.out.println(test1.multiply(test2));
+		System.out.println(test1.add(test2));
 		System.out.println("test1: "+ test1);
 		System.out.println("test2: "+ test2);
-		System.out.println(test2.equals(test1.add(test3)));
+		System.out.println(test3.equals(test1.add(test2)));
+		System.out.println(test1.negate());
+		System.out.println(test2.negate());
+		
+		System.out.println();
+		
+		System.out.println("test1: "+ test4);
+		System.out.println("test2: "+ test5);
+		System.out.println(test4.add(test5));
+		System.out.println("test1: "+ test4);
+		System.out.println("test2: "+ test5);
+		System.out.println(test6.equals(test4.add(test5)));
+		System.out.println(test4.negate());
+		System.out.println(test5.negate());
 		
 //		double totalTime = 0;
 //		double time1 = 0;
@@ -32,7 +48,7 @@ public class Main {
 //		System.out.println(test1.size() * 2);
 //		
 //		time1 = System.nanoTime();
-//		test1.multiply(test2);
+//		System.out.println(test1.multiply(test2));
 //		time2 = System.nanoTime();
 //		totalTime = (time2 - time1) / 1000;
 //		System.out.println(totalTime);

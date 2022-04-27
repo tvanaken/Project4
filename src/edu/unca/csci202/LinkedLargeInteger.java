@@ -1,6 +1,5 @@
 package edu.unca.csci202;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -94,7 +93,7 @@ public class LinkedLargeInteger implements LargeInteger {
 
 
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
-		LinkedList<Integer> result = new LinkedList<Integer>();
+		LinkedLargeInteger result = new LinkedLargeInteger("");
 		int num1Size = list.size() - 1;
 		int num2Size = argList.size() - 1;
 		int largeInt;
@@ -105,16 +104,9 @@ public class LinkedLargeInteger implements LargeInteger {
 		
 		if (this.max(argList) == this) {
 			
-			if (isNegative && !argList.isNegative) {
+			if (!isNegative && argList.isNegative) {
 				
-				this.subtract(num);
-				isNegative = true;
-				return this;
-			} else if (!isNegative && argList.isNegative) {
-				
-				argList.isNegative = false;
-				this.subtract(argList);
-				return this;
+				return this.subtract(argList.negate());
 			} else if (isNegative && argList.isNegative) {
 				
 				lengthDiff = num2Size - num1Size;
@@ -123,14 +115,16 @@ public class LinkedLargeInteger implements LargeInteger {
 					largeInt = list.get(i);
 					smallInt = argList.list.get(i + lengthDiff);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.list.add(addition % 10);
 					leftOver = addition / 10;
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					addition = (list.get(i) + leftOver);
-					result.add(addition % 10);
-					leftOver = addition / 10;				}
+					result.list.add(addition % 10);
+					leftOver = addition / 10;				
+				}
+			result.isNegative = true;
 			} else {
 			
 				lengthDiff = num1Size - num2Size;
@@ -139,31 +133,32 @@ public class LinkedLargeInteger implements LargeInteger {
 					largeInt = list.get(i + lengthDiff);
 					smallInt = argList.list.get(i);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.list.add(addition % 10);
 					leftOver = addition / 10;
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					addition = (list.get(i) + leftOver);
-					result.add(addition % 10);
+					result.list.add(addition % 10);
 					leftOver = addition / 10;
 				}
 			}
 		} else if (this.max(argList) == argList) {
 			
 			if (isNegative && !argList.isNegative) {
-				
+
 				isNegative = false;
 				if (this.max(argList) == this) {
-					this.subtract(argList);
+					result = (LinkedLargeInteger) this.subtract(argList);
 					isNegative = true;
-					return this;
+					result.isNegative = true;
+					return result;
 				} else {
-					this.subtract(argList);
-					isNegative = false;
-					return this;
+					result = (LinkedLargeInteger) argList.subtract(this);
+					isNegative = true;
+					return result;
 				}
-				
+
 			} else if (isNegative && argList.isNegative) {
 				
 				lengthDiff = num1Size - num2Size;
@@ -172,14 +167,15 @@ public class LinkedLargeInteger implements LargeInteger {
 					smallInt = list.get(i + lengthDiff);
 					largeInt = argList.list.get(i);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.list.add(addition % 10);
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
-					addition = (argList.list.get(i) + leftOver);
-					result.add(addition % 10);
+					addition = (list.get(i) + leftOver);
+					result.list.add(addition % 10);
 					leftOver = addition / 10;				
 				}
+				result.isNegative = true;
 			} else {
 			
 				lengthDiff = num2Size - num1Size;
@@ -188,12 +184,12 @@ public class LinkedLargeInteger implements LargeInteger {
 					largeInt = list.get(i);
 					smallInt = argList.list.get(i + lengthDiff);
 					addition = largeInt + smallInt + leftOver;
-					result.add(addition % 10);
+					result.list.add(addition % 10);
 					leftOver = addition / 10;
 				}
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					addition = (argList.list.get(i) + leftOver);
-					result.add(addition % 10);
+					result.list.add(addition % 10);
 					leftOver = addition / 10;
 				}
 			}
@@ -205,23 +201,26 @@ public class LinkedLargeInteger implements LargeInteger {
 				largeInt = list.get(i);
 				smallInt = argList.list.get(i + lengthDiff);
 				addition = largeInt + smallInt + leftOver;
-				result.add(addition % 10);
+				result.list.add(addition % 10);
 				leftOver = addition / 10;
 			}
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				addition = (argList.list.get(i) + leftOver);
-				result.add(addition % 10);
+				result.list.add(addition % 10);
 				leftOver = addition / 10;
+			}
+			
+			if (isNegative && argList.isNegative) {
+				result.isNegative = true;
 			}
 		}
 		
 		if (leftOver > 0) {
-			result.add(leftOver);
+			result.list.add(leftOver);
 		}
 		
-		Collections.reverse(result);
-		list = result;
-		return this;
+		Collections.reverse(result.list);
+		return result;
 	}
 
 	/**
@@ -245,7 +244,7 @@ public class LinkedLargeInteger implements LargeInteger {
 	public LargeInteger subtract(LargeInteger num) {
 		
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
-		LinkedList<Integer> result = new LinkedList<Integer>();
+		LinkedLargeInteger result = new LinkedLargeInteger("");
 		int num1Size = list.size() - 1;
 		int num2Size = argList.size() - 1;
 		int largeInt;
@@ -257,17 +256,11 @@ public class LinkedLargeInteger implements LargeInteger {
 		if (this.max(argList) == this) {
 
 			if (isNegative && !argList.isNegative) {
-
-				isNegative = false;
 				
-				this.add(num);
-				return this;
+				return this.negate().add(num);
 			} else if (!isNegative && argList.isNegative) {
 				
-				argList.isNegative = false;
-				this.add(argList);
-				isNegative = false;
-				return this;
+				return this.add(argList.negate());
 			} else if (isNegative && argList.isNegative){
 				
 				lengthDiff = num2Size - num1Size;
@@ -283,21 +276,21 @@ public class LinkedLargeInteger implements LargeInteger {
 					} else {
 						leftOver = 0;
 					}
-					result.add(difference);
+					result.list.add(difference);
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					if (list.get(i) == 0 && leftOver > 0) {
-						result.add(9);
+						result.list.add(9);
 						continue;
 					}
 					difference = list.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
-						result.add(difference);
+						result.list.add(difference);
 					}
 					leftOver = 0;
 				}
-				isNegative = false;
+				result.isNegative = false;
 			} else {
 			
 				lengthDiff = num1Size - num2Size;
@@ -313,17 +306,17 @@ public class LinkedLargeInteger implements LargeInteger {
 					} else {
 						leftOver = 0;
 					}
-					result.add(difference);
+					result.list.add(difference);
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					if (list.get(i) == 0 && leftOver > 0) {
-						result.add(9);
+						result.list.add(9);
 						continue;
 					}
 					difference = list.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
-						result.add(difference);
+						result.list.add(difference);
 					}
 					leftOver = 0;
 				}
@@ -332,10 +325,7 @@ public class LinkedLargeInteger implements LargeInteger {
 			
 			if (isNegative && !argList.isNegative) {
 				
-				isNegative = false;
-				this.add(argList);
-				isNegative = true;
-				return this;
+				return this.negate().add(argList).negate();
 			} else if (isNegative && argList.isNegative) {
 				
 				lengthDiff = num1Size - num2Size;
@@ -351,21 +341,21 @@ public class LinkedLargeInteger implements LargeInteger {
 					} else {
 						leftOver = 0;
 					}
-					result.add(difference);
+					result.list.add(difference);
 				}
 	
 				for (int i = lengthDiff - 1; i >= 0; i--) {
 					if (list.get(i) == 0 && leftOver > 0) {
-						result.add(9);
+						result.list.add(9);
 						continue;
 					}
 					difference = list.get(i) - leftOver;
 					if (difference > 0 || i > 0) {
-						result.add(difference);
+						result.list.add(difference);
 					}
 					leftOver = 0;
 				}
-				isNegative = true;
+				result.isNegative = true;
 			} else {
 			
 			lengthDiff = num2Size - num1Size;
@@ -380,27 +370,43 @@ public class LinkedLargeInteger implements LargeInteger {
 				} else {
 					leftOver = 0;
 				}
-				result.add(difference);
+				result.list.add(difference);
 			}
 			
 			for (int i = lengthDiff - 1; i >= 0; i--) {
 				if (argList.list.get(i) == 0 && leftOver > 0) {
-					result.add(9);
+					result.list.add(9);
 					continue;
 				}
 				difference = argList.list.get(i) - leftOver;
 				if (difference > 0 || i > 0) {
-					result.add(difference);
+					result.list.add(difference);
 				}
 				leftOver = 0;
 			}
-			isNegative = true;
+			result.isNegative = true;
+			}
+		} else {
+			
+			lengthDiff = num1Size - num2Size;
+			for (int i = num2Size; i >= 0; i--) {
+				
+				largeInt = list.get(i + lengthDiff);
+				smallInt = argList.list.get(i);
+				difference = largeInt - smallInt - leftOver;
+
+				if (difference < 0) {
+					difference += 10;
+					leftOver = 1;
+				} else {
+					leftOver = 0;
+				}
+				result.list.add(difference);
 			}
 		}
 
-		Collections.reverse(result);
-		list = result;
-		return this;
+		Collections.reverse(result.list);
+		return result;
 	}
 
 	/**
@@ -411,7 +417,11 @@ public class LinkedLargeInteger implements LargeInteger {
 		
 		LinkedLargeInteger temp = new LinkedLargeInteger(this.toString());
 		
-		temp.isNegative = true;
+		if (isNegative) {
+			temp.isNegative = false;
+		} else {
+			temp.isNegative = true;
+		}
 		
 		return temp;
 	}
@@ -435,19 +445,19 @@ public class LinkedLargeInteger implements LargeInteger {
 	 */
 	public LargeInteger multiply(LargeInteger num) {
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
-		LinkedList<Integer> result = new LinkedList<Integer>();
+		LinkedLargeInteger result = new LinkedLargeInteger("");
 		int num1Size = list.size();
 		int num2Size = argList.size();
 		int top = 0;
 		int bottom = 0;
 		int first;
 		int second;
-		result.add(0);
+		result.list.add(0);
 		
 		if (argList.toString().equals("0") || this.toString().equals("0")) {
-			list = result;
-			isNegative = false;
-			return this;
+			result.list.add(0);
+			result.isNegative = false;
+			return result;
 		}
 		
 		for (int i = num1Size - 1; i >= 0; i--) {
@@ -459,34 +469,33 @@ public class LinkedLargeInteger implements LargeInteger {
 				second = argList.list.get(j);
 				int product = first * second;
 				try {
-					product += result.get(top + bottom) + leftOver;
+					product += result.list.get(top + bottom) + leftOver;
 				} catch (IndexOutOfBoundsException e) {
 					product += leftOver;
 				}
 				leftOver = product / 10;
 				try {
-					result.set(top + bottom, product % 10);
+					result.list.set(top + bottom, product % 10);
 				} catch (IndexOutOfBoundsException e) {
-					result.add(product % 10);
+					result.list.add(product % 10);
 				}
 				
 				bottom++;
 			}
 			if (leftOver > 0) {
-				result.add(0);
-				result.set(top + bottom, result.get(top + bottom) + leftOver);
+				result.list.add(0);
+				result.list.set(top + bottom, result.list.get(top + bottom) + leftOver);
 			}
 			top++;
 		}
 		
 		if ((argList.isNegative && !isNegative) || (isNegative == true && !argList.isNegative)) {
-			isNegative = true;
+			result.isNegative = true;
 		} else if (isNegative && argList.isNegative) {
-			isNegative = false;
+			result.isNegative = false;
 		}
-		Collections.reverse(result);
-		list = result;
-		return this;
+		Collections.reverse(result.list);
+		return result;
 	}
 
 	/**
@@ -494,6 +503,7 @@ public class LinkedLargeInteger implements LargeInteger {
 	 * @return LargeInteger the larger of the two LinkedLargeIntegers
 	 */
 	public LargeInteger max(LargeInteger num) {
+		
 		LinkedLargeInteger argList = new LinkedLargeInteger(num.toString());
 		
 		if ((!isNegative && argList.isNegative)) {
